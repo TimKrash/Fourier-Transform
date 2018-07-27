@@ -5,14 +5,14 @@ import os
 class ImageBitmap:
 
 	def __init__(self, img):
-		self._img = Image.open(os.getcwd() + '/Fourier/Images/' + img + '.jpg')
+		self._img = Image.open(os.getcwd() + '/Images/' + img + '.jpg')
 
 	def image_array(self):
 		self._arr = np.array(self._img)
 		return self._arr
 
 	# Split the array into three channels (r, g, b)
-	def get_bitmap(self):
+	def get_bitmap(self, scale = 3):
 		self.r, self.g, self.b = np.split(self._arr, 3, axis = 2)
 		self.r = self.r.reshape(-1)
 		self.g = self.r.reshape(-1)
@@ -23,7 +23,10 @@ class ImageBitmap:
 		self.bitmap = np.array(self.bitmap).reshape(self._arr.shape[0], self._arr.shape[1])
 		self.bitmap = np.dot((self.bitmap > 128).astype(float), 255)
 		im = Image.fromarray(self.bitmap.astype(np.uint8))
-		im.save('image.bmp')
+		
+	#scale down image
+		im_sm = im.resize(tuple([int(v / scale) for v in im.size]), Image.ANTIALIAS)
+		im_sm.show()
 
 
 
